@@ -23,7 +23,6 @@ def query_active_members(conn):
 # Query 2: Show all books by a specified author's name or last name
 def query_books_by_author_name(conn, author_name):
     cursor = conn.cursor()
-    # Use LOWER() to make the search case-insensitive and match any part of the author's name
     cursor.execute("""
         SELECT Book.Title, Book.Length
         FROM Book
