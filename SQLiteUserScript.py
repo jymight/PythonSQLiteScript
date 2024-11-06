@@ -23,16 +23,20 @@ def query_active_members(conn):
 # Query 2: Show all books by a specified author's name or last name
 def query_books_by_author_name(conn, author_name):
     cursor = conn.cursor()
+    # Use LOWER() to make the search case-insensitive and match any part of the author's name
     cursor.execute("""
         SELECT Book.Title, Book.Length
         FROM Book
         JOIN Author ON Book.AuthorID = Author.AuthorID
-        WHERE Author.Name LIKE ?;
-    """, (f"%{author_name}%",))
+        WHERE LOWER(Author.Name) LIKE ?;
+    """, (f"%{author_name.lower()}%",))
     results = cursor.fetchall()
-    print(f"Books by Author {author_name}:")
-    for row in results:
-        print(row)
+    if results:
+        print(f"Books by Author matching '{author_name}':")
+        for row in results:
+            print(row)
+    else:
+        print(f"No books found for author '{author_name}'.")
 
 
 # Query 3: Display books rated above a certain rating
@@ -78,6 +82,22 @@ def query_rental_history(conn, user_id):
     else:
         print(f"No rental history found for user '{user_id}'.")
 
+# Query 6: Show all books with their authors
+def query_all_books_with_authors(conn):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT Book.Title, Author.Name
+        FROM Book
+        JOIN Author ON Book.AuthorID = Author.AuthorID;
+    """)
+    results = cursor.fetchall()
+    if results:
+        print("Books and their Authors:")
+        for row in results:
+            print(f"Book: {row[0]}, Author: {row[1]}")
+    else:
+        print("No books found.")
+
 
 # Main function to execute queries
 def main():
@@ -90,7 +110,8 @@ def main():
         print("3. Display books rated above a certain rating")
         print("4. Show total number of books checked out")
         print("5. Show rental history for a specified user")
-        print("6. Exit")
+        print("6. Show all books with their authors")
+        print("7. Exit")
 
         choice = input("Enter the number of your choice: ")
 
@@ -114,6 +135,8 @@ def main():
             user_id = input("Enter UserID: ")
             query_rental_history(conn, user_id)
         elif choice == '6':
+            query_all_books_with_authors(conn)
+        elif choice == '7':
             print("Exiting the program.")
             break
         else:
