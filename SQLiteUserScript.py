@@ -2,7 +2,7 @@ import sqlite3
 
 
 # Connect to the SQLite database
-def connect_db(db_file="your_database.db"):
+def connect_db(db_file="Mbatia_Love.db"):
     conn = sqlite3.connect(db_file)
     return conn
 
@@ -30,12 +30,9 @@ def query_books_by_author_name(conn, author_name):
         WHERE Author.Name LIKE ?;
     """, (f"%{author_name}%",))
     results = cursor.fetchall()
-    if results:
-        print(f"Books by Author {author_name}:")
-        for row in results:
-            print(row)
-    else:
-        print(f"No books found for author '{author_name}'.")
+    print(f"Books by Author {author_name}:")
+    for row in results:
+        print(row)
 
 
 # Query 3: Display books rated above a certain rating
