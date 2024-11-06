@@ -82,6 +82,7 @@ def query_rental_history(conn, user_id):
     else:
         print(f"No rental history found for user '{user_id}'.")
 
+
 # Query 6: Show all books with their authors
 def query_all_books_with_authors(conn):
     cursor = conn.cursor()
