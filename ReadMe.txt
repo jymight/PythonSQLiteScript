@@ -1,9 +1,9 @@
-Project Name: Library Database Query Script
+Library Database Query Script
 Names: Jayden Mbatia & Jyair Love
 
 Instructions:
-1. Place the `your_database.db` SQLite database file in the same directory as the script (`query_script.py`).
-2. Open a terminal or command prompt in the directory containing `query_script.py` and `your_database.db`.
+1. Place the Mbatia_Love.db SQLite database file in the same directory as the script (SQLiteUserScript.py).
+2. Open a terminal or command prompt in the directory containing SQLiteUserScript.py and Mbatia_Love.db.
 3. Run the script using the following command: SQLiteUserScript.py
 4. Follow the on-screen prompts to interact with the script:
 - Choose an option by entering the number of the desired query.
