@@ -17,12 +17,17 @@ def query_active_members(conn):
         print(row)
 
 
-# Query 2: Show all books by a specified author
-def query_books_by_author(conn, author_id):
+# Query 2: Show all books by a specified author's name or last name
+def query_books_by_author_name(conn, author_name):
     cursor = conn.cursor()
-    cursor.execute("SELECT Title, Length FROM Book WHERE AuthorID = ?;", (author_id,))
+    cursor.execute("""
+        SELECT Book.Title, Book.Length
+        FROM Book
+        JOIN Author ON Book.AuthorID = Author.AuthorID
+        WHERE Author.Name LIKE ?;
+    """, (f"%{author_name}%",))
     results = cursor.fetchall()
-    print(f"Books by Author {author_id}:")
+    print(f"Books by Author {author_name}:")
     for row in results:
         print(row)
 
@@ -83,8 +88,8 @@ def main():
         if choice == '1':
             query_active_members(conn)
         elif choice == '2':
-            author_id = input("Enter AuthorID: ")
-            query_books_by_author(conn, author_id)
+            author_name = input("Enter Author's Name or Last Name: ")
+            query_books_by_author_name(conn, author_name)
         elif choice == '3':
             rating = int(input("Enter minimum rating (1-5): "))
             query_books_above_rating(conn, rating)
