@@ -2,7 +2,7 @@ import sqlite3
 
 
 # Connect to the SQLite database
-def connect_db(db_file="Mbatia_Love.db"):
+def connect_db(db_file="your_database.db"):
     conn = sqlite3.connect(db_file)
     return conn
 
@@ -12,9 +12,12 @@ def query_active_members(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT Name, PhoneNumber FROM User WHERE MembershipStatus = 'Active';")
     results = cursor.fetchall()
-    print("Active Members:")
-    for row in results:
-        print(row)
+    if results:
+        print("Active Members:")
+        for row in results:
+            print(row)
+    else:
+        print("No active members found.")
 
 
 # Query 2: Show all books by a specified author's name or last name
@@ -27,9 +30,12 @@ def query_books_by_author_name(conn, author_name):
         WHERE Author.Name LIKE ?;
     """, (f"%{author_name}%",))
     results = cursor.fetchall()
-    print(f"Books by Author {author_name}:")
-    for row in results:
-        print(row)
+    if results:
+        print(f"Books by Author {author_name}:")
+        for row in results:
+            print(row)
+    else:
+        print(f"No books found for author '{author_name}'.")
 
 
 # Query 3: Display books rated above a certain rating
@@ -42,9 +48,12 @@ def query_books_above_rating(conn, rating):
         WHERE R.Rating >= ?;
     """, (rating,))
     results = cursor.fetchall()
-    print(f"Books with Rating {rating} and above:")
-    for row in results:
-        print(row)
+    if results:
+        print(f"Books with Rating {rating} and above:")
+        for row in results:
+            print(row)
+    else:
+        print(f"No books found with a rating of {rating} or above.")
 
 
 # Query 4: Show total number of books checked out
@@ -65,9 +74,12 @@ def query_rental_history(conn, user_id):
         WHERE RentalService.MemberID = ?;
     """, (user_id,))
     results = cursor.fetchall()
-    print(f"Rental history for User {user_id}:")
-    for row in results:
-        print(row)
+    if results:
+        print(f"Rental history for User {user_id}:")
+        for row in results:
+            print(row)
+    else:
+        print(f"No rental history found for user '{user_id}'.")
 
 
 # Main function to execute queries
@@ -91,14 +103,21 @@ def main():
             author_name = input("Enter Author's Name or Last Name: ")
             query_books_by_author_name(conn, author_name)
         elif choice == '3':
-            rating = int(input("Enter minimum rating (1-5): "))
-            query_books_above_rating(conn, rating)
+            try:
+                rating = int(input("Enter minimum rating (1-5): "))
+                if 1 <= rating <= 5:
+                    query_books_above_rating(conn, rating)
+                else:
+                    print("Please enter a valid rating between 1 and 5.")
+            except ValueError:
+                print("Invalid input. Please enter an integer between 1 and 5.")
         elif choice == '4':
             query_checked_out_books_count(conn)
         elif choice == '5':
             user_id = input("Enter UserID: ")
             query_rental_history(conn, user_id)
         elif choice == '6':
+            print("Exiting the program.")
             break
         else:
             print("Invalid choice. Please select a valid option.")
